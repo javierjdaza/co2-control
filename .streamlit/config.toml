@@ -1,0 +1,10 @@
+[theme]
+base="light"
+primaryColor="#486EDB"
+
+[server]
+runOnSave = true
+
+
+
+

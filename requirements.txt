@@ -1,0 +1,5 @@
+hydralit_components==1.0.10
+pandas==1.5.3
+streamlit==1.18.1
+streamlit_extras==0.2.6
+streamlit_on_Hover_tabs==1.0.1
