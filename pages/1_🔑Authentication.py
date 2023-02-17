@@ -17,7 +17,7 @@ col1,col2,col3 = st.columns((1,2,1))
 with col2:
     col1_,col2_,col3_ = st.columns((1,2,1))
     with col2_:
-        st.image('./img/logo_2.png')
+        st.image('./img/logo_1.png')
     st.write('---')
     st.markdown("<h1 style='text-align: center; color: #000000;'>👤 <br> CO2 Control Authentication </h1>", unsafe_allow_html=True)
     st.write('---') 

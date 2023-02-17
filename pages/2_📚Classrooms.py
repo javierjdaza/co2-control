@@ -30,7 +30,7 @@ if 'auth_' not in st.session_state or st.session_state['auth_'] == False:
     with col2_:
         l1,l2,l3 = st.columns((1,2,1))
         with l2:
-            st.image('./img/logo_2.png')
+            st.image('./img/logo_1.png')
         st.write('---')
         st.markdown("<h3 style='text-align: center; color: #000000;'>Classrooms Information 📊</h3>", unsafe_allow_html=True)
         st.write('---') 
@@ -89,7 +89,6 @@ elif st.session_state['auth_'] == True:
     # ------------------------
     else:
         menu_data = [
-                {'icon': "👨‍🎓", 'label':"User Management",'ttip':"View all users management!"},#no tooltip message
                 {'icon': "👤", 'label':"Profile",'ttip':"Profile Settings"}, #can add a tooltip message
                 {'icon': "👨‍💻", 'label':"About",'ttip':"The Team!"}, #can add a tooltip message
                 {'icon': "🏠", 'label':"Home",'ttip':"Go to Home!"}, #can add a tooltip message
