@@ -62,7 +62,7 @@ if submit:
                 st.success('Login Success, loading...', icon = '💥')
                 st.info(f'Welcome: {name} {last_name} \n \n Role: {role}')
                 time.sleep(3)
-            switch_page("Classrooms_2")
+            switch_page("Classrooms")
     else:
         l1,l2,l3 = st.columns((1,2,1))
         with l2:
