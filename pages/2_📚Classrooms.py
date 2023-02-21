@@ -1,14 +1,13 @@
 import streamlit as st
 import pandas as pd
 from streamlit_extras.switch_page_button import switch_page
-from utils import side_bar_colored,button_customized,progress_bar,new_user
+from utils import side_bar_colored,progress_bar,new_user
 import hydralit_components as hc
 import time
 from datetime import datetime
 
 side_bar_colored()
 
-button_customized()
 
 
 # =====================
@@ -23,7 +22,6 @@ button_customized()
 
 # ===========================
 # Authentication FAILED
-# ===========================
 if 'auth_' not in st.session_state or st.session_state['auth_'] == False:
 
     col1_,col2_,col3_ = st.columns((1,2,1))
@@ -43,6 +41,8 @@ if 'auth_' not in st.session_state or st.session_state['auth_'] == False:
     
     if go_to_login:
         switch_page('Authentication')
+# ===========================
+
 
 
 # ===========================

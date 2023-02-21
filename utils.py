@@ -2,7 +2,8 @@
 import pandas as pd
 import streamlit as st
 import time
-
+import random
+from datetime import datetime, timedelta
 @st.cache_data
 def authentication(user:str, password:str):
     response = False
@@ -27,59 +28,36 @@ def authentication(user:str, password:str):
 def side_bar_colored():
     page_bg_img = """
     <style>
-
-    [data-testid="stSidebar"]{
-        background-color:#486EDB;
-        color: white;
-    }
-    .css-17lntkn{
-        color: white;
-    }
-
     section[data-testid="stSidebar"] > div {
 
         padding-top: 90px;
-
-
-
     }
     </style>
     """
     st.markdown(page_bg_img,unsafe_allow_html=True)
 
-def button_customized():
-    page_button = """
-    <style>
+@st.cache_data()
+def create_dummy_date():
 
-    button[kind="secondary"]{
+    aulas = ['aula 1','aula 2','aula 3','aula 4','aula 5']
 
-        padding: 2em 25em 2em 25em;
-        background: #efefef;
-        border: none;
-        border-radius: .5rem;
-        color: #444;
-        font-size: 1rem;
-        font-weight: 700;
-        letter-spacing: .1rem;
-        text-align: center;
-        outline: none;
-        cursor: pointer;
-        transition: .2s ease-in-out;
-        box-shadow: -6px -6px 14px rgba(255, 255, 255, .7),
-                    -6px -6px 10px rgba(255, 255, 255, .5),
-                    6px 6px 8px rgba(255, 255, 255, .075),
-                    6px 6px 10px rgba(0, 0, 0, .15);
-    }
-    button[kind="secondary"]:hover{
+    dict_dummy = []
+    start_date = datetime.strptime('31/12/2022', '%d/%m/%Y')
+    for i in aulas:
+        for dia in range(1,51):
+            dict_ = {
+                'aula':i,
+                'medicion': random.randint(450,650),
+                'datetime': start_date + timedelta(dia),
+                'sensor' : f'{i}_sensor'
+            }
+            dict_dummy.append(dict_)
+    df = pd.DataFrame(dict_dummy)
+    return df
+    # start_date = datetime.strptime('01/06/2022', '%d/%m/%Y')
+    # end_date = datetime.strptime('20/02/2023', '%d/%m/%Y')
+    # end_date - start_date
 
-        box-shadow: -2px -2px 6px rgba(255, 255, 255, .6),
-              -2px -2px 4px rgba(255, 255, 255, .4),
-              2px 2px 2px rgba(255, 255, 255, .05),
-              2px 2px 4px rgba(0, 0, 0, .1);
-    }
-    </style>
-    """
-    st.markdown(page_button,unsafe_allow_html=True)
 
 def progress_bar(title:str):
     progress_text = "Loading the information...Please Wait"
@@ -87,7 +65,6 @@ def progress_bar(title:str):
     for percent_complete in range(4):
         time.sleep(0.5)
         my_bar.progress(percent_complete + 25, text=progress_text)
-
 
 def new_user(user,password,name,last_name,role,date_login):
     new_user_data = {

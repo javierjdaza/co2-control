@@ -1,10 +1,16 @@
 [theme]
 base="light"
-primaryColor="#486EDB"
+primaryColor="#3F72AF"
+secondaryBackgroundColor="#DBE2EF"
+
+
+backgroundColor="#F9F7F7"
+textColor="#222831"
+
+
 
 [server]
 runOnSave = true
-
 
 
 
