@@ -174,6 +174,16 @@ elif st.session_state['auth_'] == True:
     #   # =====================
     elif menu_selected == 'Cerrar Sesion':
         st.title(' ')
+        st.write('---')
+        st.write(' ')
+        st.write(' ')
+        b1,b2,b3 = st.columns((1,4,1))
+        # with a1:
+        #     st.image('img/usuario.png')
+
+        with b2:
+            st.warning('Cerrando Sesion...')
+            time.sleep(3)
         switch_page('authentication')
     
 
