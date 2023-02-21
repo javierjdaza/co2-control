@@ -141,7 +141,7 @@ elif st.session_state['auth_'] == True:
     # =====================
     elif menu_id == 'Home':
         st.title(' ')
-        switch_page('Home')
+        # switch_page('Home')
     
 
     # =====================
@@ -253,19 +253,3 @@ elif st.session_state['auth_'] == True:
                 if create_new_classroom_button:
                         st.warning(f'TODO: Connect to Sensor API',  icon='📐')
 
-    # =====================
-    # About
-    # =====================
-    elif menu_id == 'About':
-        st.title('About 👨‍💻')
-        st.write('---')
-        st.write('')
-        st.write('')
-
-        a1,a2,a3 = st.columns((1,1,2))
-        with a1:
-            st.image('img/ivan.jpeg',)
-            st.markdown("<h5 style='text-align: center; color: #434242;'>Ivan Daniel Maestre Muza <br> Software Engineer <br> Universidad Industrial de Santander</h7>", unsafe_allow_html=True)
-        with a2:
-            st.image('img/eladio.jpeg',)
-            st.markdown("<h5 style='text-align: center; color: #434242;'>Eladio Carrion Morales <br> Industrial Engineer <br> Universidad Industrial de Socorro</h7>", unsafe_allow_html=True)
