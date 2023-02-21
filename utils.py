@@ -47,7 +47,7 @@ def create_dummy_date():
         for dia in range(1,51):
             dict_ = {
                 'aula':i,
-                'medicion': random.randint(450,650),
+                'medicion': random.randint(400,1000),
                 'datetime': start_date + timedelta(dia),
                 'sensor' : f'{i}_sensor'
             }

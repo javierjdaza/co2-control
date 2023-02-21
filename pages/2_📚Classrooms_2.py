@@ -84,7 +84,7 @@ elif st.session_state['auth_'] == True:
         a1,a2,a3 = st.columns((1,10,1))
         with a2:
             l4,l5,l6 = st.columns((4,1,1))
-            menu_selected = option_menu(menu_title= None, options=['Home','Classrooms Data','User Management','Profile','About',], icons= ['house','speedometer','people','person-circle','cup'], orientation='horizontal',default_index=1)
+            menu_selected = option_menu(menu_title= None, options=['Inicio','Aulas','Gestion de Usuarios','Perfil','Monitoreo','Bases de Datos'], icons= ['house','bar-chart','people','person-circle','speedometer','box'], orientation='horizontal',default_index=1)
             # with l1:
             #     st.success('CO2 Control')
                 # st.image('./img/logo_1.png', width=140)
@@ -111,7 +111,7 @@ elif st.session_state['auth_'] == True:
                 st.success(f'{name}', icon = '👤')
             with l6:
                 st.warning(f'{role}', icon = '📍')
-            menu_selected = option_menu(menu_title= None, options=['Home','Classrooms Data','Profile','About',], icons= ['house','speedometer','person-circle','cup'], orientation='horizontal',default_index=1)
+            menu_selected = option_menu(menu_title= None, options=['Inicio','Aulas','Perfil','Monitoreo',], icons= ['house','bar-chart','person-circle','speedometer'], orientation='horizontal',default_index=1)
 
 
 
@@ -119,7 +119,7 @@ elif st.session_state['auth_'] == True:
     # CLASSROOMS DISPLAY
     # =====================
     
-    if menu_selected == 'Classrooms Data':
+    if menu_selected == 'Aulas':
         # st.title('Classrooms Realtime Information 📈')
         st.write('---')
         st.write('')
@@ -137,18 +137,18 @@ elif st.session_state['auth_'] == True:
                 aula = df_temp_dict[0]['aula']
                 medicion = df_temp_dict[0]['medicion']
                 datetime = df_temp_dict[0]['datetime'].strftime('%d-%m-%Y')
-                alerta = '🔴' if medicion >500 else '🟢'
+                alerta = '🔴' if medicion >800 else '🟢'
                 texto = f'{aula.title()} | Last Lecture: {datetime} | Co2 Levels: {medicion}ppm {alerta}'
                 options_list.append(texto)
 
             class_selected = option_menu(menu_title= 'Classrooms Information 📈', menu_icon = 'info-square-fill',options=options_list, orientation='vertical',default_index=0)
 
-            st.caption('The records with the symbol 🚨🚨, means levels of CO2 above 500 ppm')
+            st.caption('The records with the symbol 🚨🚨, means levels of CO2 above 800 ppm')
             st.write('---')
 
             for i in options_list:
                 if class_selected == i:
-                    st.title('Dashboard 📊')
+                    st.title('Dashboards 📊')
                     st.write('---')
                     aula_selected = i.split('|')[0].lower().strip()
                     df_temp_2 = df[df['aula'] == f'{aula_selected}']
@@ -157,19 +157,31 @@ elif st.session_state['auth_'] == True:
                     fig.update_layout(title_text=f'Line Plot CO2 Levels | {aula_selected.title()}', title_x=0.42,xaxis_title = 'Date',yaxis_title = 'Nivel de CO2',legend_title = 'Aula')
                     fig.add_hline(y=df['medicion'].mean())
                     st.plotly_chart(fig, use_container_width=True)
+                    st.write('---')
+                    k1,k2 = st.columns(2)
+                    st.write('---')
+                    with k1:
+                        fig_2 = px.histogram(df_temp_2, x="medicion", nbins=20)
+                        fig_2.update_layout(title_text=f'Histogram Plot CO2 Levels | {aula_selected.title()}', title_x=0.42,xaxis_title = 'Nivel de CO2',yaxis_title = 'Distribucion',legend_title = 'Aula')
+                        st.plotly_chart(fig_2)
+                    with k2:
+                        fig_3 = px.bar(df_temp, x='datetime', y='medicion')
+                        fig_3.update_layout(title_text=f'Bar Plot CO2 Levels | {aula_selected.title()}', title_x=0.42,xaxis_title = 'Date',yaxis_title = 'Nivel de CO2',legend_title = 'Aula')
+                        fig_3.update_traces(marker_color='green')
+                        st.plotly_chart(fig_3)
 
     # =====================
-    # HOME
+    # Inicio
     # =====================
-    elif menu_selected == 'Home':
+    elif menu_selected == 'Inicio':
         st.title(' ')
         switch_page('authentication')
     
 
     # =====================
-    # PROFILE
+    # Perfil
     # =====================
-    elif menu_selected == 'Profile':
+    elif menu_selected == 'Perfil':
         st.write('---')
         st.write(' ')
         st.write(' ')
@@ -215,9 +227,9 @@ elif st.session_state['auth_'] == True:
 
                             
     # =====================
-    # User Management
+    # Gestion de Usuarios
     # =====================
-    elif menu_selected == 'User Management':
+    elif menu_selected == 'Gestion de Usuarios':
         st.write('---')
         st.write('')
         st.write('')
@@ -341,5 +353,39 @@ elif st.session_state['auth_'] == True:
                     # else:
                     #     st.error('El usuario no se ha podido eliminar')
 
+    # =====================
+    # Monitoreo
+    # =====================
+
+    if menu_selected == 'Monitoreo':
+        st.write('---')
+        st.write(' ')
+        st.write(' ')
+        t1,t2,t3 = st.columns((1,4,1))
+
+        with t2:
+            st.title('Monitoreo 🧬')
     
-    
+
+    # =====================
+    # Bases de datos
+    # =====================
+
+    if menu_selected == 'Bases de Datos':
+        st.write('---')
+        st.write(' ')
+        st.write(' ')
+        r1,r2,r3 = st.columns((1,4,1))
+
+        with r2:
+            items = fetch_all_users()
+            df_users = pd.DataFrame(items)
+            st.title('DB: Users 📋')
+            st.write(' ')
+            st.dataframe(df_users, use_container_width=True)
+            st.write('---')
+            st.title('DB: Aulas 📋')
+            df_aulas = create_dummy_date()
+            st.dataframe(df_aulas, use_container_width=True)
+            st.write('---')
+                     

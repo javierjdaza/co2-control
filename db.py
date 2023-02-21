@@ -35,25 +35,26 @@ def get_user(user_name:str):
 
 def authentication(user_name_input:str, password_input):
     user_fetched = get_user(user_name_input)
-    if user_fetched != None:
-        password_fetched = user_fetched['password']
-        if password_input == password_fetched:
-            password = user_fetched['password']
-            name = user_fetched['name']
-            last_name = user_fetched['last_name']
-            role = user_fetched['role']
-            date_login = user_fetched['date_login']
-            user_name = user_fetched['key']
-            auth_flag = True
-            return auth_flag,password,name,last_name,role,date_login,user_name
-        else:
-            password = ''
-            name = ''
-            last_name = ''
-            role = ''
-            date_login = ''
-            auth_flag = False
-            return auth_flag,password,name,last_name,role,date_login
+    password_fetched = user_fetched['password']
+    if user_fetched != None and password_fetched == password_input:
+
+        password = user_fetched['password']
+        name = user_fetched['name']
+        last_name = user_fetched['last_name']
+        role = user_fetched['role']
+        date_login = user_fetched['date_login']
+        user_name = user_fetched['key']
+        auth_flag = True
+        return auth_flag,password,name,last_name,role,date_login,user_name
+    else:
+        password = ''
+        name = ''
+        last_name = ''
+        role = ''
+        date_login = ''
+        auth_flag = False
+        user_name = ''
+        return auth_flag,password,name,last_name,role,date_login,user_name
 
 
 def change_password(user_name_input,password_input,new_password_input:str):
