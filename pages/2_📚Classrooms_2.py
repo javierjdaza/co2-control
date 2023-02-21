@@ -84,7 +84,7 @@ elif st.session_state['auth_'] == True:
         a1,a2,a3 = st.columns((1,10,1))
         with a2:
             l4,l5,l6 = st.columns((4,1,1))
-            menu_selected = option_menu(menu_title= None, options=['Inicio','Aulas','Gestion de Usuarios','Perfil','Monitoreo','Bases de Datos'], icons= ['house','bar-chart','people','person-circle','speedometer','box'], orientation='horizontal',default_index=1)
+            menu_selected = option_menu(menu_title= None, options=['Aulas','Gestion de Usuarios','Perfil','Monitoreo','Bases de Datos','Cerrar Sesion'], icons= ['bar-chart','people','person-circle','speedometer','box','door-closed'], orientation='horizontal',default_index=0)
             # with l1:
             #     st.success('CO2 Control')
                 # st.image('./img/logo_1.png', width=140)
@@ -111,7 +111,7 @@ elif st.session_state['auth_'] == True:
                 st.success(f'{name}', icon = '👤')
             with l6:
                 st.warning(f'{role}', icon = '📍')
-            menu_selected = option_menu(menu_title= None, options=['Inicio','Aulas','Perfil','Monitoreo',], icons= ['house','bar-chart','person-circle','speedometer'], orientation='horizontal',default_index=1)
+            menu_selected = option_menu(menu_title= None, options=['Aulas','Perfil','Monitoreo','Cerrar Sesion'], icons= ['bar-chart','person-circle','speedometer','door-closed'], orientation='horizontal',default_index=0)
 
 
 
@@ -171,9 +171,8 @@ elif st.session_state['auth_'] == True:
                         st.plotly_chart(fig_3)
 
     # =====================
-    # Inicio
-    # =====================
-    elif menu_selected == 'Inicio':
+    #   # =====================
+    elif menu_selected == 'Cerrar Sesion':
         st.title(' ')
         switch_page('authentication')
     
