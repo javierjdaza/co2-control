@@ -9,7 +9,14 @@ from db import get_user, authentication, change_password,create_new_user,fetch_a
 import plotly.express as px
 side_bar_colored()
 
-
+hide_st_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_st_style, unsafe_allow_html=True)
 from streamlit_option_menu import option_menu
 # =====================
 # Session Manager
