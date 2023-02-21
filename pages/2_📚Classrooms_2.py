@@ -259,7 +259,7 @@ elif st.session_state['auth_'] == True:
 
                         
                     user_date_registration = datetime.now().strftime('%d-%m-%Y')
-                    create_new_user_button = user_management_form.form_submit_button('Sign Up',type = 'primary')
+                    create_new_user_button = user_management_form.form_submit_button('Agregar Usuario',type = 'primary')
 
                     if create_new_user_button:
                         flag_exists = create_new_user(user_name = user_nick_name,password = user_password,name = user_name,last_name = user_last_name,role = user_role)
