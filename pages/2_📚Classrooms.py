@@ -163,12 +163,12 @@ elif st.session_state['auth_'] == True:
                     with k1:
                         fig_2 = px.histogram(df_temp_2, x="medicion", nbins=20)
                         fig_2.update_layout(title_text=f'Histogram Plot CO2 Levels | {aula_selected.title()}', title_x=0.42,xaxis_title = 'Nivel de CO2',yaxis_title = 'Distribucion',legend_title = 'Aula')
-                        st.plotly_chart(fig_2)
+                        st.plotly_chart(fig_2, use_container_width=True)
                     with k2:
                         fig_3 = px.bar(df_temp, x='datetime', y='medicion')
                         fig_3.update_layout(title_text=f'Bar Plot CO2 Levels | {aula_selected.title()}', title_x=0.42,xaxis_title = 'Date',yaxis_title = 'Nivel de CO2',legend_title = 'Aula')
                         fig_3.update_traces(marker_color='green')
-                        st.plotly_chart(fig_3)
+                        st.plotly_chart(fig_3, use_container_width=True)
 
     # =====================
     #   # =====================
