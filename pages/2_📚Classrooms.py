@@ -5,8 +5,11 @@ from utils import side_bar_colored,create_dummy_date
 import hydralit_components as hc
 import time
 from datetime import datetime
+from streamlit_option_menu import option_menu
 from db import get_user, authentication, change_password,create_new_user,fetch_all_users,delete_user,update_user
 import plotly.express as px
+
+
 side_bar_colored()
 
 hide_st_style = """
@@ -17,7 +20,6 @@ hide_st_style = """
             </style>
             """
 st.markdown(hide_st_style, unsafe_allow_html=True)
-from streamlit_option_menu import option_menu
 # =====================
 # Session Manager
 # =====================
@@ -127,23 +129,40 @@ elif st.session_state['auth_'] == True:
         f1,f2,f3 = st.columns((1,10,1))
         df = create_dummy_date()
         with f2:
-            options_list = []
+            
             aulas = df['aula'].unique()
-            for i in aulas:
-                df_temp = df[df['aula'] == i]
-                df_temp.sort_values(by = ['datetime'], ascending = False, inplace =True)
-                df_temp = df_temp.head()
-                df_temp_dict = df_temp.to_dict(orient = 'records')
-                aula = df_temp_dict[0]['aula']
-                medicion = df_temp_dict[0]['medicion']
-                datetime = df_temp_dict[0]['datetime'].strftime('%d-%m-%Y')
-                alerta = '🔴' if medicion >800 else '🟢'
+
+            # =====================
+            # Seleccionar edificio
+            # =====================
+            z1,z2,z3 = st.columns(3)
+            with z1:
+                edificio = st.selectbox(label='Seleccionar edificio:', options = df['edificio'].unique())
+            with z2:
+                piso = st.selectbox(label='Seleccionar piso:', options = df['piso'].unique())
+            # for i in aulas:
+            df_temp = df[(df['edificio'] == edificio) & (df['piso'] == piso)]
+            df_temp.sort_values(by = ['datetime'], ascending = False, inplace =True)
+            df_temp = df_temp.head()
+            df_temp_dict = df_temp.to_dict(orient = 'records')
+            options_list = []
+            for i in df_temp_dict:
+
+                aula = i['aula']
+                medicion = i['medicion']
+                datetime = i['datetime'].strftime('%d-%m-%Y')
+                alerta = '🔴' 
+                if medicion >=400 and medicion <= 799:
+                    alerta = '🟢'
+                elif medicion >=800 and medicion <=999:
+                    alerta = '🟡'
+
                 texto = f'{aula.title()} | Last Lecture: {datetime} | Co2 Levels: {medicion}ppm {alerta}'
                 options_list.append(texto)
 
-            class_selected = option_menu(menu_title= 'Classrooms Information 📈', menu_icon = 'info-square-fill',options=options_list, orientation='vertical',default_index=0)
+            class_selected = option_menu(menu_title= 'Informacion Aulas 📈', menu_icon = 'info-square-fill',options=options_list, orientation='vertical',default_index=0)
 
-            st.caption('The records with the symbol 🚨🚨, means levels of CO2 above 800 ppm')
+            st.caption('🔴 ppm: [1000,2000] ➖ 🟡 ppm: [800,999] ➖ 🟢 ppm: [400,799] ➖ ⚪ error de conexion')
             st.write('---')
 
             for i in options_list:
@@ -151,11 +170,12 @@ elif st.session_state['auth_'] == True:
                     st.title('Dashboards 📊')
                     st.write('---')
                     aula_selected = i.split('|')[0].lower().strip()
-                    df_temp_2 = df[df['aula'] == f'{aula_selected}']
+                    df_temp_2 = df[(df['edificio'] == edificio) & (df['piso'] == piso) & (df['aula'] == f'{aula_selected}')]
                     # st.dataframe(df_temp_2, use_container_width=True)
                     fig = px.line(df_temp_2, x="datetime", y="medicion",  color='aula')
                     fig.update_layout(title_text=f'Line Plot CO2 Levels | {aula_selected.title()}', title_x=0.42,xaxis_title = 'Date',yaxis_title = 'Nivel de CO2',legend_title = 'Aula')
-                    fig.add_hline(y=800,line=dict(color="#EB4747"))
+                    fig.add_hline(y=1000,line=dict(color="#EB4747"))
+                    fig.add_hline(y=800,line=dict(color="#FFD966"))
                     st.plotly_chart(fig, use_container_width=True)
                     st.write('---')
                     k1,k2 = st.columns(2)
@@ -169,7 +189,10 @@ elif st.session_state['auth_'] == True:
                         fig_3.update_layout(title_text=f'Bar Plot CO2 Levels | {aula_selected.title()}', title_x=0.42,xaxis_title = 'Date',yaxis_title = 'Nivel de CO2',legend_title = 'Aula')
                         fig_3.update_traces(marker_color='green')
                         st.plotly_chart(fig_3, use_container_width=True)
-
+            
+            st.markdown("<h3 style='text-align: center; color: #000000;'>Raw Data 📊</h3>", unsafe_allow_html=True)
+            st.write(' ')
+            st.dataframe(df_temp_2, use_container_width=True)
     # =====================
     #   # =====================
     elif menu_selected == 'Cerrar Sesion':
