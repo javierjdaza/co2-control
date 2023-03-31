@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 from streamlit_extras.switch_page_button import switch_page
 from utils import side_bar_colored,create_dummy_date
-import hydralit_components as hc
 import time
 from datetime import datetime
 from streamlit_option_menu import option_menu

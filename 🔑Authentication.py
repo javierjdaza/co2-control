@@ -3,7 +3,7 @@ import streamlit as st
 from utils import authentication, side_bar_colored
 from streamlit_extras.switch_page_button import switch_page
 import time
-from st_on_hover_tabs import on_hover_tabs
+
 
 from db import get_user, authentication
 
