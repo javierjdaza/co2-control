@@ -32,6 +32,15 @@ def fetch_all_users():
 def get_user(user_name:str):
     return db.get(user_name)
 
+def fetch_all_co2_data():
+    db = deta.Base("data_co2")
+    res = db.fetch()
+    all_items = res.items
+
+    while res.last:
+        res = db.fetch(last=res.last)
+        all_items += res.items
+    return all_items
 
 def authentication(user_name_input:str, password_input):
     user_fetched = get_user(user_name_input)

@@ -5,7 +5,7 @@ from utils import side_bar_colored,create_dummy_date
 import time
 from datetime import datetime
 from streamlit_option_menu import option_menu
-from db import get_user, authentication, change_password,create_new_user,fetch_all_users,delete_user,update_user
+from db import get_user, authentication, change_password,create_new_user,fetch_all_users,delete_user,update_user,fetch_all_co2_data
 import plotly.express as px
 
 
@@ -26,8 +26,12 @@ st.markdown(hide_st_style, unsafe_allow_html=True)
 # st.session_state['last_name'] = 'last_name'
 # st.session_state['role'] = 'role'
 
-
-
+@st.cache_data(show_spinner=False)
+def get_data_co2():
+    df = pd.DataFrame(fetch_all_co2_data())
+    df['datetime'] = pd.to_datetime(df['datetime'])
+    df.sort_values(by = ['datetime'], ascending=True, inplace=True)
+    return df
 
 # ===========================
 # Authentication FAILED
@@ -126,13 +130,15 @@ elif st.session_state['auth_'] == True:
         st.write('')
         st.write('')
         f1,f2,f3 = st.columns((1,10,1))
-        df = create_dummy_date()
+        with st.spinner(text='Fetching all data, please wait...'):
+            df = get_data_co2()
+        
         with f2:
             
             aulas = df['aula'].unique()
 
             # =====================
-            # Seleccionar edificio
+            # Seleccionar edificio 
             # =====================
             z1,z2,z3 = st.columns(3)
             with z1:
