@@ -153,8 +153,10 @@ elif st.session_state['auth_'] == True:
             df_temp = df[(df['edificio'] == edificio) & (df['piso'] == piso)]
             df_temp.sort_values(by = ['datetime'], ascending = False, inplace =True)
             df_temp = df_temp.head()
-            df_temp_dict = df_temp.to_dict(orient = 'records')
+            df_temp_grouped = df_temp.groupby(['aula'], as_index = False)['datetime','edificio','medicion','piso','sensor'].max()
+            df_temp_dict = df_temp_grouped.to_dict(orient = 'records')
             options_list = []
+
             for i in df_temp_dict:
 
                 aula = i['aula']
