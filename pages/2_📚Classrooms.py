@@ -3,10 +3,14 @@ import pandas as pd
 from streamlit_extras.switch_page_button import switch_page
 from utils import side_bar_colored,create_dummy_date
 import time
-from datetime import datetime
+from datetime import datetime,timedelta
 from streamlit_option_menu import option_menu
 from db import get_user, authentication, change_password,create_new_user,fetch_all_users,delete_user,update_user,fetch_all_co2_data
 import plotly.express as px
+import pickle
+from sklearn.pipeline import Pipeline
+
+from sklearn.ensemble import RandomForestRegressor
 
 
 side_bar_colored()
@@ -89,7 +93,7 @@ elif st.session_state['auth_'] == True:
         a1,a2,a3 = st.columns((1,10,1))
         with a2:
             l4,l5,l6 = st.columns((4,1,1))
-            menu_selected = option_menu(menu_title= None, options=['Aulas','Gestion de Usuarios','Perfil','Monitoreo','Bases de Datos','Cerrar Sesion'], icons= ['bar-chart','people','person-circle','speedometer','box','door-closed'], orientation='horizontal',default_index=0)
+            menu_selected = option_menu(menu_title= None, options=['Aulas','Gestion de Usuarios','Perfil','Bases de Datos','Cerrar Sesion'], icons= ['bar-chart','people','person-circle','box','door-closed'], orientation='horizontal',default_index=0)
             # with l1:
             #     st.success('CO2 Control')
                 # st.image('./img/logo_1.png', width=140)
@@ -174,15 +178,49 @@ elif st.session_state['auth_'] == True:
                 if class_selected == i:
                     st.title('Dashboards 📊')
                     st.write('---')
+                    st.markdown("<h3 style='text-align: center; color: #000000;'>Linea de Tiempo</h3>", unsafe_allow_html=True)
+                    st.write(' ')
+                    st.write(' ')
+                    st.write(' ')
                     aula_selected = i.split('|')[0].lower().strip()
                     df_temp_2 = df[(df['edificio'] == edificio) & (df['piso'] == piso) & (df['aula'] == f'{aula_selected}')]
+                    df_temp_2['tipo_medicion'] = 'real'
                     # st.dataframe(df_temp_2, use_container_width=True)
                     fig = px.line(df_temp_2, x="datetime", y="medicion",  color='aula')
-                    fig.update_layout(title_text=f'Line Plot CO2 Levels | {aula_selected.title()}', title_x=0.42,xaxis_title = 'Date',yaxis_title = 'Nivel de CO2',legend_title = 'Aula')
+                    fig.update_layout(title_text=f'Line Plot CO2 Levels | {aula_selected.title()}', title_x=0.42,xaxis_title = 'Fecha',yaxis_title = 'Nivel de CO2',legend_title = 'Aula')
                     fig.add_hline(y=1000,line=dict(color="#EB4747"))
                     fig.add_hline(y=800,line=dict(color="#FFD966"))
                     st.plotly_chart(fig, use_container_width=True)
                     st.write('---')
+
+
+                    st.markdown("<h3 style='text-align: center; color: #000000;'>Monitoreo 🧬</h3>", unsafe_allow_html=True)
+                    st.write(' ')
+                    st.write(' ')
+                    st.write(' ')
+                    new_date = df_temp_2.datetime.max() + timedelta(1)
+                    new_value = pd.DataFrame([{'datetime':new_date}])
+                    model = pickle.load(open('./model.pkl','rb'))
+                    new_value = pd.DataFrame([{'datetime':new_date}])
+                    y_predict = int(model.predict(new_value)[0])
+                    df_predict = pd.DataFrame([{'datetime':new_date,'medicion':y_predict,'aula': aula_selected,'edificio': edificio,'piso':piso,'tipo_medicion':'prediccion'}])
+                    df_temp_2 = df_temp_2.append(df_predict)
+                    df_2 = df_temp_2[df_temp_2['datetime'] >= pd.to_datetime('2023-06-01')]
+                    fig = px.line(df_2, x="datetime", y="medicion",  color='tipo_medicion',text="medicion",color_discrete_sequence=["blue", "red"])
+                    fig.update_layout(title_text=f'Prediccion Siguiente dia', title_x=0.42,xaxis_title = 'Fecha',)
+                    fig.update_traces( line_width=3)
+
+                    fig.update_traces(textposition="top right")
+
+
+                    st.plotly_chart(fig, use_container_width=True)
+                    st.write('---')
+                    st.markdown("<h3 style='text-align: center; color: #000000;'>Graficos Exploratorios 🧩</h3>", unsafe_allow_html=True)
+                    st.write(' ')
+                    st.write(' ')
+                    st.write(' ')
+
+
                     k1,k2 = st.columns(2)
                     st.write('---')
                     with k1:
@@ -191,7 +229,7 @@ elif st.session_state['auth_'] == True:
                         st.plotly_chart(fig_2, use_container_width=True)
                     with k2:
                         fig_3 = px.bar(df_temp_2, x='datetime', y='medicion')
-                        fig_3.update_layout(title_text=f'Bar Plot CO2 Levels | {aula_selected.title()}', title_x=0.42,xaxis_title = 'Date',yaxis_title = 'Nivel de CO2',legend_title = 'Aula')
+                        fig_3.update_layout(title_text=f'Bar Plot CO2 Levels | {aula_selected.title()}', title_x=0.42,xaxis_title = 'Fecha',yaxis_title = 'Nivel de CO2',legend_title = 'Aula')
                         fig_3.update_traces(marker_color='green')
                         st.plotly_chart(fig_3, use_container_width=True)
             
@@ -390,18 +428,7 @@ elif st.session_state['auth_'] == True:
                     # else:
                     #     st.error('El usuario no se ha podido eliminar')
 
-    # =====================
-    # Monitoreo
-    # =====================
-
-    if menu_selected == 'Monitoreo':
-        st.write('---')
-        st.write(' ')
-        st.write(' ')
-        t1,t2,t3 = st.columns((1,4,1))
-
-        with t2:
-            st.title('Monitoreo 🧬')
+  
     
 
     # =====================
